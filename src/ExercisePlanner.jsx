@@ -1,6 +1,7 @@
 // ExercisePlanner.js
 import React, { useState } from "react";
 import OpenAI from "openai";
+import "./ExercisePlanner.css";
 
 function ExercisePlanner() {
   const [weight, setWeight] = useState("");
@@ -49,8 +50,35 @@ function ExercisePlanner() {
         ],
         model: "gpt-3.5-turbo",
       });
+      let fullResponseText = response.choices[0].message.content;
 
-      setRecommendations(response.choices[0].message.content);
+      fullResponseText = fullResponseText.replace(/¡\s*/g, "<br/><br/>¡");
+
+      // Dividir y formatear la respuesta para incluir saltos de línea en JSX
+      const dailyRecommendationsJSX = fullResponseText
+        .split(/Día \d+: /)
+        .slice(1) // Eliminar el primer elemento si está vacío debido al split
+        .map((dayPlan, index) => {
+          // Dividir cada plan de día en partes para procesar saltos de línea adicionales
+          const dayParts = dayPlan
+            .split("<br/><br/>")
+            .map((part, partIndex) => (
+              <React.Fragment key={partIndex}>
+                {partIndex > 0 && <br />}{" "}
+                {/* Agregar salto de línea solo entre partes */}
+                {part.trim()}
+              </React.Fragment>
+            ));
+
+          return (
+            <div key={index}>
+              <strong>{`Día ${index + 1}`}</strong>: {dayParts}
+            </div>
+          );
+        });
+
+      // Actualizar el estado con las recomendaciones formateadas como elementos JSX
+      setRecommendations(<>{dailyRecommendationsJSX}</>);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -106,9 +134,7 @@ function ExercisePlanner() {
             Your IMC is {imc} ({imcCategory})
           </p>
           <h3>Recommendations:</h3>
-          <div>
-            <p>{recommendations}</p>
-          </div>
+          <div className="recommendations-container">{recommendations}</div>
         </div>
       )}
     </div>
