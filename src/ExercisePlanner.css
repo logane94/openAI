@@ -1,10 +1,8 @@
-/* Estilos generales para el contenedor */
 div {
   font-family: "Arial", sans-serif;
   margin: 20px;
 }
 
-/* Estilos para el formulario */
 form {
   display: flex;
   flex-direction: column;
@@ -27,7 +25,7 @@ input[type="checkbox"] {
 }
 
 button {
-  background-color: #4caf50; /* Green */
+  background-color: #4caf50;
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
@@ -40,7 +38,6 @@ button:hover {
   background-color: #45a049;
 }
 
-/* Estilos para las recomendaciones */
 h3 {
   color: #333;
 }

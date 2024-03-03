@@ -54,19 +54,15 @@ function ExercisePlanner() {
 
       fullResponseText = fullResponseText.replace(/¡\s*/g, "<br/><br/>¡");
 
-      // Dividir y formatear la respuesta para incluir saltos de línea en JSX
       const dailyRecommendationsJSX = fullResponseText
         .split(/Día \d+: /)
-        .slice(1) // Eliminar el primer elemento si está vacío debido al split
+        .slice(1)
         .map((dayPlan, index) => {
-          // Dividir cada plan de día en partes para procesar saltos de línea adicionales
           const dayParts = dayPlan
             .split("<br/><br/>")
             .map((part, partIndex) => (
               <React.Fragment key={partIndex}>
-                {partIndex > 0 && <br />}{" "}
-                {/* Agregar salto de línea solo entre partes */}
-                {part.trim()}
+                {partIndex > 0 && <br />} {part.trim()}
               </React.Fragment>
             ));
 
@@ -77,7 +73,6 @@ function ExercisePlanner() {
           );
         });
 
-      // Actualizar el estado con las recomendaciones formateadas como elementos JSX
       setRecommendations(<>{dailyRecommendationsJSX}</>);
     } catch (error) {
       console.error("Error:", error);
